@@ -334,7 +334,7 @@ export default function BillingPage() {
       
       await api.patch(`/api/v1/bills/${selectedBill.id}/`, {
         discount,
-        other_fees: selectedBill.other_fees + otherFeesTotal,
+        other_fees: (selectedBill.other_fees || 0) + otherFeesTotal,
         additional_items: editOtherFees,
       });
       addNotification({
