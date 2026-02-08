@@ -77,9 +77,11 @@ export function RegistrationForm({ onSuccess, onCancel }: RegistrationFormProps)
       const response = await api.get('/core/users/', {
         params: { role: 'doctor' },
       });
-      setDoctors(response.data);
-      if (response.data.length > 0) {
-        setValue('doctor_id', response.data[0].id);
+      const doctorList = response.data?.results || response.data || [];
+      const doctors = Array.isArray(doctorList) ? doctorList : [];
+      setDoctors(doctors);
+      if (doctors.length > 0) {
+        setValue('doctor_id', doctors[0].id);
       }
     } catch (error) {
       console.error('Failed to fetch doctors:', error);
@@ -98,7 +100,8 @@ export function RegistrationForm({ onSuccess, onCancel }: RegistrationFormProps)
       const response = await api.get(endpoints.patients.search, {
         params: { q: query },
       });
-      setPatientResults(response.data);
+      const patients = response.data?.results || response.data || [];
+      setPatientResults(Array.isArray(patients) ? patients : []);
     } catch (error) {
       console.error('Failed to search patients:', error);
     } finally {
